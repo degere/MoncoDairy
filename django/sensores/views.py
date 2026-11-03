@@ -2,8 +2,14 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.hashers import check_password
+from .serializers import (
+    UsuarioSerializer, 
+    RegistroUsuarioPINSerializer, 
+    LoginPINSerializer
+)
 from django.utils import timezone
-from .models import Sensor, LecturaSensor, Alerta, Animal, CollarRfid, Tratamiento
+from .models import Sensor, LecturaSensor, Alerta, Animal, CollarRfid, Tratamiento, Rol, Usuario
 import logging
 # Create your views here.
 
@@ -140,3 +146,65 @@ class VerificacionRFIDOrdeñaAPIView(APIView):
             "alerta_visual": "Ordeña Habilitada",
             "color": "VERDE"
         }, status=status.HTTP_200_OK)
+
+
+
+
+
+class LoginPINAPIView(APIView):
+    """
+    Endpoint para autenticación de usuarios operacionales y administrativos mediante PIN de 6 dígitos.
+    Soporta RBAC retornando el rol y permisos asignados según el organigrama.
+    """
+    def post(self, request, *args, **kwargs):
+        serializer = LoginPINSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        email = serializer.validated_data['email']
+        pin = serializer.validated_data['pin']
+
+        try:
+            usuario = Usuario.objects.select_related('rol').get(email=email, activo=True)
+        except Usuario.DoesNotExist:
+            return Response({"error": "Credenciales inválidas o usuario inactivo."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Verificación criptográfica segura del PIN hasheado
+        if not check_password(pin, usuario.password_hash):
+            logger.warning(f"Intento fallido de login por PIN para el usuario: {email}")
+            return Response({"error": "PIN incorrecto."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Determinar vistas y accesos según el Rol (RBAC)
+        rol_nombre = usuario.rol.nombre.upper()
+        
+        # Respuesta de autenticación exitosa
+        return Response({
+            "status": "success",
+            "mensaje": f"Bienvenido, {usuario.nombre}",
+            "usuario": UsuarioSerializer(usuario).data,
+            "permisos": {
+                "rol": rol_nombre,
+                "acceso_admin": rol_nombre in ["ADMINISTRADOR", "VETERINARIO"],
+                "acceso_terreno": True,
+                "acceso_maternidad": rol_nombre in ["ADMINISTRADOR", "PARTERO", "TERNERERO", "VETERINARIO"],
+                "acceso_ordenia": rol_nombre in ["ADMINISTRADOR", "LECHERO", "VETERINARIO"]
+            }
+        }, status=status.HTTP_200_OK)
+
+
+class RegistroUsuarioPINAPIView(APIView):
+    """
+    Endpoint administrativo para registrar nuevos usuarios asignándoles un PIN de 6 dígitos.
+    """
+    def post(self, request, *args, **kwargs):
+        serializer = RegistroUsuarioPINSerializer(data=request.data)
+        if serializer.is_valid():
+            usuario = serializer.save()
+            logger.info(f"Usuario registrado exitosamente con PIN: {usuario.email}")
+            return Response({
+                "status": "success",
+                "mensaje": "Usuario creado exitosamente con autenticación por PIN.",
+                "usuario": UsuarioSerializer(usuario).data
+            }, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

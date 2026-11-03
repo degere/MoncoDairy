@@ -1,0 +1,26 @@
+name: moncodairy_sense
+description: Monitor de sensores para corrales (MoncoDairy Sense).
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Cuando conectes el backend, agrega:
+  # dio: ^5.4.0                    # HTTP hacia Django REST
+  # firebase_core: ^3.0.0          # Firebase
+  # firebase_database: ^11.0.0     # Realtime Database (sensores)
+  # drift: ^2.18.0 / sqflite       # cache offline local
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  # assets:
+  #   - assets/images/portada.png   # ilustración del login

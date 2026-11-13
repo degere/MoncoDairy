@@ -1,32 +1,15 @@
 import 'package:flutter/material.dart';
 import '../core/theme.dart';
-import '../data/repository.dart';
 import '../models/models.dart';
 import '../widgets/common.dart';
 import 'sensor_detail_screen.dart';
 
-class CorralDetailScreen extends StatefulWidget {
+class CorralDetailScreen extends StatelessWidget {
   final Corral corral;
   const CorralDetailScreen({super.key, required this.corral});
 
   @override
-  State<CorralDetailScreen> createState() => _CorralDetailScreenState();
-}
-
-class _CorralDetailScreenState extends State<CorralDetailScreen> {
-  // Una sola suscripcion durante la vida de la pantalla.
-  late final Stream<Corral> _stream = Repository.instance.watchCorral(widget.corral);
-
-  @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Corral>(
-      stream: _stream,
-      initialData: widget.corral,
-      builder: (context, snap) => _contenido(context, snap.data ?? widget.corral, snap.hasError),
-    );
-  }
-
-  Widget _contenido(BuildContext context, Corral corral, bool error) {
     final critico = corral.nivelHumedad == Nivel.critico;
     return Scaffold(
       appBar: AppBar(
@@ -38,13 +21,7 @@ class _CorralDetailScreenState extends State<CorralDetailScreen> {
         children: [
           Text('${corral.nombre} — ${corral.descripcion}',
               style: const TextStyle(color: AppColors.green, fontWeight: FontWeight.w600)),
-          Text(
-              error
-                  ? 'Sin conexión: mostrando el último dato recibido'
-                  : corral.enVivo
-                      ? 'En tiempo real · ${corral.dispositivo ?? 'sensor'}'
-                      : 'Datos simulados',
-              style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
+          const Text('Actualizado hace 3 seg', style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
           const SizedBox(height: 14),
           if (critico) ...[
             AppCard(

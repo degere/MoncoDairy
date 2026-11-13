@@ -14,12 +14,6 @@ abstract class Repository {
 
   /// Lecturas de humedad de las últimas 24 h (25 puntos, una por hora).
   Future<List<double>> getHumedad24h(int corralId);
-
-  /// Corrales en tiempo real (se emite de nuevo cada vez que llega una lectura).
-  Stream<List<Corral>> watchCorrales();
-
-  /// Un corral en tiempo real; parte de [corral] y emite sus lecturas nuevas.
-  Stream<Corral> watchCorral(Corral corral);
 }
 
 class MockRepository implements Repository {
@@ -79,12 +73,6 @@ class MockRepository implements Repository {
       Aviso(id: 10, titulo: 'Corral 5 — Temperatura baja', detalle: 'Temperatura 9°C — Camas frías', tiempo: 'Hace 2 días', pendiente: false, resueltoTexto: 'Hace 2 días'),
     ];
   }
-
-  @override
-  Stream<List<Corral>> watchCorrales() => Stream.fromFuture(getCorrales());
-
-  @override
-  Stream<Corral> watchCorral(Corral corral) => Stream.value(corral);
 
   @override
   Future<List<double>> getHumedad24h(int corralId) async {

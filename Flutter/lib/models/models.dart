@@ -7,12 +7,20 @@ class Corral {
   final double humedad;
   final double temperatura;
 
+  /// true cuando humedad/temperatura vienen de Firebase (sensor real).
+  final bool enVivo;
+
+  /// Dispositivo que envio la lectura real (campo `dispositivo` de /telemetria).
+  final String? dispositivo;
+
   const Corral({
     required this.id,
     required this.nombre,
     required this.descripcion,
     required this.humedad,
     required this.temperatura,
+    this.enVivo = false,
+    this.dispositivo,
   });
 
   /// Umbrales según el diseño: <=60 ok, <75 alerta, >=75 crítico.

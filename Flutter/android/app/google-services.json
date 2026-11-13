@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "10164404657",
+    "firebase_url": "https://appmoncopullisensores-default-rtdb.firebaseio.com",
+    "project_id": "appmoncopullisensores",
+    "storage_bucket": "appmoncopullisensores.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10164404657:android:62bccb2e66d0741d2f7d90",
+        "android_client_info": {
+          "package_name": "cl.apisensores"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyXCkJLwSXyPr4v-1KmxdaHYbE6kLXcbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

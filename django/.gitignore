@@ -1,3 +1,7 @@
 venv/
 __pycache__/
+*.py[cod]
 .env
+serviceAccountKey.json
+*.sqlite3
+staticfiles/

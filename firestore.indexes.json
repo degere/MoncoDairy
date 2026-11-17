@@ -1,0 +1,21 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "telemetria",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "dispositivo", "order": "ASCENDING" },
+        { "fieldPath": "timestamp", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "alertas",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "estado_lectura", "order": "ASCENDING" },
+        { "fieldPath": "fecha_hora", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

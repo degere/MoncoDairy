@@ -1,0 +1,116 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "telemetria": {
+      ".read": "auth != null",
+      ".indexOn": ["timestamp", "dispositivo"],
+      "$registro_id": {
+        ".write": "auth != null || (!data.exists() && newData.exists())",
+        ".validate": "newData.hasChildren(['dispositivo', 'lecturas_crudas'])",
+        "dispositivo": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 64"
+        },
+        "fecha_local": {
+          ".validate": "newData.isString() && newData.val().length <= 40"
+        },
+        "timestamp": {
+          ".validate": "newData.isString() && newData.val().length <= 40"
+        },
+        "corral_id": {
+          ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 100"
+        },
+        "lecturas_crudas": {
+          ".validate": "newData.hasChildren(['temperatura_celsius', 'humedad_ambiente_pct'])",
+          "temperatura_celsius": {
+            ".validate": "newData.isNumber() && newData.val() >= -20 && newData.val() <= 70"
+          },
+          "humedad_ambiente_pct": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "alertas": {
+      ".read": "auth != null",
+      ".indexOn": ["fecha_hora", "nivel", "estado_lectura"],
+      "$alerta_id": {
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['tipo_alerta', 'nivel', 'mensaje', 'fecha_hora', 'estado_lectura'])",
+        "sensor_id": {
+          ".validate": "newData.isNumber() || (newData.isString() && newData.val().length <= 64)"
+        },
+        "dispositivo": {
+          ".validate": "newData.isString() && newData.val().length <= 64"
+        },
+        "corral_id": {
+          ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 100"
+        },
+        "tipo_alerta": {
+          ".validate": "newData.isString() && (newData.val() == 'ESTRES_FRIO_TERNERO' || newData.val() == 'ESTRES_CALOR_TERNERO' || newData.val() == 'CAMAS_CALIENTES_HUMEDAD')"
+        },
+        "nivel": {
+          ".validate": "newData.isString() && (newData.val() == 'ROJO' || newData.val() == 'AMARILLO' || newData.val() == 'VERDE')"
+        },
+        "mensaje": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 500"
+        },
+        "fecha_hora": {
+          ".validate": "newData.isString() && newData.val().length <= 40"
+        },
+        "estado_lectura": {
+          ".validate": "newData.isString() && (newData.val() == 'PENDIENTE' || newData.val() == 'LEIDA' || newData.val() == 'RESUELTA')"
+        },
+        "valor": {
+          ".validate": "newData.isNumber() && newData.val() >= -50 && newData.val() <= 150"
+        },
+        "unidad": {
+          ".validate": "newData.isString() && newData.val().length <= 10"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "corrales": {
+      ".read": "auth != null",
+      "$corral_id": {
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['id', 'nombre', 'humedad', 'temperatura'])",
+        "id": {
+          ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 100"
+        },
+        "nombre": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+        },
+        "descripcion": {
+          ".validate": "newData.isString() && newData.val().length <= 250"
+        },
+        "humedad": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+        },
+        "temperatura": {
+          ".validate": "newData.isNumber() && newData.val() >= -20 && newData.val() <= 70"
+        },
+        "enVivo": {
+          ".validate": "newData.isBoolean()"
+        },
+        "dispositivo": {
+          ".validate": "newData.isString() && newData.val().length <= 64"
+        },
+        "actualizado_en": {
+          ".validate": "newData.isString() && newData.val().length <= 40"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}

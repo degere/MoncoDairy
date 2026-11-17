@@ -128,3 +128,20 @@ class UsuarioPINJWTAuthentication(authentication.BaseAuthentication):
 
     def authenticate_header(self, request):
         return self.keyword
+
+
+try:
+    from drf_spectacular.extensions import OpenApiAuthenticationExtension
+
+    class UsuarioPINJWTAuthenticationScheme(OpenApiAuthenticationExtension):
+        target_class = 'sensores.authentication.UsuarioPINJWTAuthentication'
+        name = 'pinJwtAuth'
+
+        def get_security_definition(self, auto_schema):
+            return {
+                'type': 'http',
+                'scheme': 'bearer',
+                'bearerFormat': 'JWT',
+            }
+except ImportError:
+    pass

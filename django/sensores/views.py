@@ -1,10 +1,12 @@
 import logging
 from django.contrib.auth.hashers import check_password
 from django.utils import timezone
-from rest_framework import permissions, status
+from rest_framework import permissions, serializers, status
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .authentication import construir_permisos_rol, generar_tokens_para_usuario
 from .firebase_service import (
@@ -19,12 +21,15 @@ from .models import Alerta, Animal, CollarRfid, LecturaSensor, Rol, Sensor, Trat
 from .permissions import EsAdministradorOVeterinario, PermisoRegistroUsuario
 from .serializers import (
     AlertaSerializer,
+    IngestaIoTInputSerializer,
     LoginPINSerializer,
+    RefreshTokenPINSerializer,
     RegistroUsuarioPINSerializer,
     RolSerializer,
     SensorSerializer,
     TelemetriaFirebaseInputSerializer,
     UsuarioSerializer,
+    VerificacionRFIDInputSerializer,
 )
 
 logger = logging.getLogger(__name__)
@@ -36,6 +41,7 @@ class IngestaIoTAPIView(APIView):
     almacena en la base de datos transaccional, evalúa el motor de alertas sanitarias
     para ternereras y publica/sincroniza los datos en Firebase Realtime Database (`/telemetria` y `/alertas`).
     """
+    serializer_class = IngestaIoTInputSerializer
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = 'iot_ingesta'
 
@@ -44,8 +50,20 @@ class IngestaIoTAPIView(APIView):
         sensor_id = data.get('sensor_id')
         valor = data.get('valor')
         unidad = data.get('unidad')  # '°C' o '%'
-        dispositivo = str(data.get('dispositivo', f'Sensor_{sensor_id or 1}')).strip()[:64]
-        corral_id = int(data.get('corral_id', 1))
+        dispositivo = str(data.get('dispositivo') or f'Sensor_{sensor_id or 1}').strip()[:64]
+
+        try:
+            corral_id = int(data.get('corral_id', 1))
+            if not (1 <= corral_id <= 100):
+                return Response(
+                    {"error": "El ID de corral debe estar entre 1 y 100."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        except (TypeError, ValueError):
+            return Response(
+                {"error": "El ID de corral debe ser un entero válido."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if not sensor_id or valor is None or not unidad:
             return Response(
@@ -163,6 +181,7 @@ class TelemetriaFirebaseAPIView(APIView):
     Maneja los datos de telemetría directamente desde y hacia Firebase Realtime Database (`/telemetria`)
     y los envía mediante la API validando rangos físicos y riesgos sanitarios.
     """
+    serializer_class = TelemetriaFirebaseInputSerializer
 
     def get(self, request, *args, **kwargs):
         limit_raw = request.query_params.get('limit', '25')
@@ -232,6 +251,7 @@ class UltimaTelemetriaFirebaseAPIView(APIView):
     """
     Obtiene el último registro válido en vivo desde `/telemetria` en Firebase Realtime Database.
     """
+    serializer_class = serializers.Serializer
 
     def get(self, request, *args, **kwargs):
         dispositivo = request.query_params.get('dispositivo')
@@ -264,6 +284,7 @@ class SincronizarFirebaseAPIView(APIView):
     Sincroniza los registros recientes de `/telemetria` en Firebase Realtime Database
     con las tablas transaccionales de Django (`Sensor`, `LecturaSensor`, `Alerta`).
     """
+    serializer_class = serializers.Serializer
 
     def post(self, request, *args, **kwargs):
         limit_raw = request.data.get('limit', 20)
@@ -296,6 +317,7 @@ class CorralesEstadoAPIView(APIView):
     Envía mediante la API el estado de los corrales combinando los datos en vivo
     de Firebase Realtime Database (`/telemetria`).
     """
+    serializer_class = serializers.Serializer
 
     def get(self, request, *args, **kwargs):
         fb = FirebaseService()
@@ -314,6 +336,7 @@ class CorralHistorialAPIView(APIView):
     """
     Envía el historial de humedad y temperatura de un corral desde Firebase `/telemetria`.
     """
+    serializer_class = serializers.Serializer
 
     def get(self, request, corral_id: int, *args, **kwargs):
         if not (1 <= corral_id <= 100):
@@ -347,6 +370,7 @@ class SensoresListCreateAPIView(APIView):
     """
     Lista e inscribe sensores en el sistema.
     """
+    serializer_class = SensorSerializer
 
     def get(self, request, *args, **kwargs):
         sensores = Sensor.objects.all().order_by('id')
@@ -375,6 +399,7 @@ class AlertasAPIView(APIView):
     """
     Lista las alertas sanitarias registradas y las alertas activas detectadas en Firebase.
     """
+    serializer_class = AlertaSerializer
 
     def get(self, request, *args, **kwargs):
         estado = request.query_params.get('estado_lectura')
@@ -406,6 +431,7 @@ class AlertaDetailAPIView(APIView):
     """
     Permite actualizar el `estado_lectura` (`PENDIENTE` -> `LEIDA` o `RESUELTA`) de una alerta.
     """
+    serializer_class = AlertaSerializer
 
     def patch(self, request, alerta_id: int, *args, **kwargs):
         try:
@@ -431,6 +457,7 @@ class VerificacionRFIDOrdeñaAPIView(APIView):
     Integra la lectura de collares RFID en las 38 bajadas de la lechería
     y valida el bloqueo de leche por antibióticos.
     """
+    serializer_class = VerificacionRFIDInputSerializer
 
     def post(self, request, *args, **kwargs):
         codigo_rfid = request.data.get('codigo_rfid')
@@ -501,6 +528,7 @@ class LoginPINAPIView(APIView):
     Emite tokens JWT firmados (`access` y `refresh`) y retorna el rol y permisos RBAC.
     Protegido con rate-limiting (`login_pin`) contra ataques de fuerza bruta.
     """
+    serializer_class = LoginPINSerializer
     permission_classes = [permissions.AllowAny]
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = 'login_pin'
@@ -546,6 +574,7 @@ class RegistroUsuarioPINAPIView(APIView):
     Endpoint administrativo para registrar nuevos usuarios asignándoles un PIN de 6 dígitos.
     Requiere rol ADMINISTRADOR (o bootstrapping inicial si la tabla de usuarios está vacía).
     """
+    serializer_class = RegistroUsuarioPINSerializer
     permission_classes = [PermisoRegistroUsuario]
 
     def post(self, request, *args, **kwargs):
@@ -569,6 +598,7 @@ class RolesListCreateAPIView(APIView):
     """
     Permite consultar o crear roles del organigrama (ADMINISTRADOR, VETERINARIO, PARTERO, TERNERERO, LECHERO).
     """
+    serializer_class = RolSerializer
     permission_classes = [PermisoRegistroUsuario]
 
     def get(self, request, *args, **kwargs):
@@ -581,3 +611,44 @@ class RolesListCreateAPIView(APIView):
             rol = serializer.save()
             return Response(RolSerializer(rol).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RefreshTokenPINAPIView(APIView):
+    """
+    Rota y emite nuevos tokens JWT (`access` y `refresh`) para usuarios operativos (`Usuario`)
+    preservando sus claims RBAC y verificando que el usuario siga activo.
+    """
+    serializer_class = RefreshTokenPINSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = RefreshTokenPINSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        raw_refresh = serializer.validated_data['refresh']
+        try:
+            refresh_token = RefreshToken(raw_refresh)
+        except TokenError:
+            return Response(
+                {"error": "Token refresh inválido o expirado."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        usuario_id = refresh_token.get('usuario_id') or refresh_token.get('user_id')
+        if not usuario_id:
+            return Response(
+                {"error": "El token no contiene identificador de usuario válido."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        try:
+            usuario = Usuario.objects.select_related('rol').get(id=usuario_id, activo=True)
+        except Usuario.DoesNotExist:
+            return Response(
+                {"error": "Usuario no encontrado o inactivo."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        tokens = generar_tokens_para_usuario(usuario)
+        return Response(tokens, status=status.HTTP_200_OK)

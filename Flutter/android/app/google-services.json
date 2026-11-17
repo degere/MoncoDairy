@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "915388982450",
+    "firebase_url": "https://cuidado-de-vacas-default-rtdb.firebaseio.com",
+    "project_id": "cuidado-de-vacas",
+    "storage_bucket": "cuidado-de-vacas.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915388982450:android:d3bcd80c17b77c110b15ab",
+        "android_client_info": {
+          "package_name": "com.example.cuidadovacas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKuPGJ1VbeamkjNm9J0RkNlA_ct4Tzkg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

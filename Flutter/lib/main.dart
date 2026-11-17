@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'core/theme.dart';
+import 'data/api_repository.dart';
+import 'data/repository.dart';
 import 'screens/login_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // La app solo habla con Django (login real y lecturas del Corral 1). Las lecturas
+  // llegan a Django por el puente Firebase -> Django; la app no toca Firebase.
+  Repository.instance = ApiRepository();
   runApp(const MoncoDairyApp());
 }
 

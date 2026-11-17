@@ -1,4 +1,4 @@
-package cl.moncodairy.moncodairy_sense
+package cl.moncodairy_sense
 
 import io.flutter.embedding.android.FlutterActivity
 

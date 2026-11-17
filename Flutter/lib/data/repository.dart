@@ -8,15 +8,27 @@ abstract class Repository {
   static Repository instance = MockRepository();
 
   Future<bool> login(String usuario, String pin);
+
+  /// Motivo del último login fallido (null si no hay o es el genérico).
+  String? get ultimoErrorLogin;
   Future<List<Corral>> getCorrales();
   Future<List<Sensor>> getSensores();
   Future<List<Aviso>> getAvisos();
 
   /// Lecturas de humedad de las últimas 24 h (25 puntos, una por hora).
   Future<List<double>> getHumedad24h(int corralId);
+
+  /// Corrales en tiempo real (se emite de nuevo cada vez que llega una lectura).
+  Stream<List<Corral>> watchCorrales();
+
+  /// Un corral en tiempo real; parte de [corral] y emite sus lecturas nuevas.
+  Stream<Corral> watchCorral(Corral corral);
 }
 
 class MockRepository implements Repository {
+  @override
+  String? get ultimoErrorLogin => null;
+
   static const _hum = [82, 65, 85, 70, 55, 78, 62, 90, 48, 73, 80, 58, 88, 66, 52, 76, 83, 60, 68, 79];
   static const _temp = [9, 12, 8, 11, 14, 10, 13, 7, 15, 11, 9, 13, 8, 12, 14, 10, 9, 13, 12, 10];
 
@@ -73,6 +85,12 @@ class MockRepository implements Repository {
       Aviso(id: 10, titulo: 'Corral 5 — Temperatura baja', detalle: 'Temperatura 9°C — Camas frías', tiempo: 'Hace 2 días', pendiente: false, resueltoTexto: 'Hace 2 días'),
     ];
   }
+
+  @override
+  Stream<List<Corral>> watchCorrales() => Stream.fromFuture(getCorrales());
+
+  @override
+  Stream<Corral> watchCorral(Corral corral) => Stream.value(corral);
 
   @override
   Future<List<double>> getHumedad24h(int corralId) async {

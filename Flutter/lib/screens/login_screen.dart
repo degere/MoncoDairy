@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       setState(() {
         _loading = false;
-        _error = 'Revisa tu usuario y que el PIN tenga 6 dígitos.';
+        _error = Repository.instance.ultimoErrorLogin ?? 'Revisa tu correo y que el PIN tenga 6 dígitos.';
       });
     }
   }
@@ -68,7 +68,8 @@ class _LoginScreenState extends State<LoginScreen> {
               TextField(
                 controller: _userCtrl,
                 textInputAction: TextInputAction.next,
-                decoration: _decoration('Usuario', Icons.person_outline),
+                keyboardType: TextInputType.emailAddress,
+                decoration: _decoration('Correo electrónico', Icons.person_outline),
               ),
               const SizedBox(height: 14),
               TextField(

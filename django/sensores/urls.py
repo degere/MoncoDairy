@@ -1,5 +1,4 @@
 from django.urls import path
-from rest_framework_simplejwt.views import TokenRefreshView
 from .views import (
     AlertaDetailAPIView,
     AlertasAPIView,
@@ -7,6 +6,7 @@ from .views import (
     CorralHistorialAPIView,
     IngestaIoTAPIView,
     LoginPINAPIView,
+    RefreshTokenPINAPIView,
     RegistroUsuarioPINAPIView,
     RolesListCreateAPIView,
     SensoresListCreateAPIView,
@@ -37,6 +37,6 @@ urlpatterns = [
     # Endpoints Autenticación PIN + JWT y Roles RBAC
     path('api/auth/login-pin/', LoginPINAPIView.as_view(), name='login-pin'),
     path('api/auth/registro-pin/', RegistroUsuarioPINAPIView.as_view(), name='registro-pin'),
-    path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+    path('api/auth/token/refresh/', RefreshTokenPINAPIView.as_view(), name='token-refresh'),
     path('api/auth/roles/', RolesListCreateAPIView.as_view(), name='roles-list-create'),
 ]

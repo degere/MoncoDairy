@@ -97,3 +97,20 @@ class TelemetriaFirebaseInputSerializer(serializers.Serializer):
     corral_id = serializers.IntegerField(min_value=1, max_value=100, required=False, default=1)
     temperatura_celsius = serializers.FloatField(min_value=-20.0, max_value=45.0, required=True)
     humedad_ambiente_pct = serializers.FloatField(min_value=0.0, max_value=100.0, required=True)
+
+
+class RefreshTokenPINSerializer(serializers.Serializer):
+    refresh = serializers.CharField(required=True)
+
+
+class IngestaIoTInputSerializer(serializers.Serializer):
+    sensor_id = serializers.IntegerField(required=True)
+    valor = serializers.FloatField(required=True)
+    unidad = serializers.CharField(required=True, max_length=20)
+    dispositivo = serializers.CharField(required=False, max_length=64, default='Sensor_1')
+    corral_id = serializers.IntegerField(required=False, min_value=1, max_value=100, default=1)
+
+
+class VerificacionRFIDInputSerializer(serializers.Serializer):
+    codigo_rfid = serializers.CharField(required=True, max_length=64)
+    bajada = serializers.IntegerField(required=False, min_value=1, max_value=38)

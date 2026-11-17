@@ -9,6 +9,7 @@ import environ
 import json
 import logging
 import os
+import sys
 from datetime import timedelta
 import firebase_admin
 from firebase_admin import credentials
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+RUNNING_TESTS = 'test' in sys.argv
 
 env = environ.Env(
     DEBUG=(bool, False),
@@ -28,7 +30,10 @@ if os.path.exists(env_file):
     environ.Env.read_env(env_file)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env(
+    'SECRET_KEY',
+    default='django-insecure-moncodairy-dev-secret-key-2026-segura-50chars-min',
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
@@ -88,9 +93,20 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # Soporta PostgreSQL (DATABASE_URL en .env) y SQLite como respaldo local seguro
-DATABASES = {
-    'default': env.db('DATABASE_URL', default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
-}
+if RUNNING_TESTS:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
+    }
+    PASSWORD_HASHERS = [
+        'django.contrib.auth.hashers.MD5PasswordHasher',
+    ]
+else:
+    DATABASES = {
+        'default': env.db('DATABASE_URL', default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
+    }
 
 
 # Password validation
@@ -183,8 +199,8 @@ CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 
-if not DEBUG:
-    SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', default=True)
+if not DEBUG and not RUNNING_TESTS:
+    SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', default=False)
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_HSTS_SECONDS = 31536000

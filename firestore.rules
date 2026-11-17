@@ -1,0 +1,258 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// This security rules file assumes the following data structures:
+//
+// Collection: telemetria
+// Document ID: {registroId}
+// Fields:
+//   - dispositivo: string (required, 1..64 chars, immutable) - Identificador del nodo IoT (ej. ESP8266_Corral1)
+//   - temperatura_celsius: number (required, -20..70, immutable) - Temperatura ambiente en grados Celsius
+//   - humedad_ambiente_pct: number (required, 0..100, immutable) - Humedad relativa porcentual
+//   - timestamp: timestamp or string (required, 1..40 chars if string, immutable) - Marca temporal UTC de lectura
+//   - fecha_local: string (optional, 1..40 chars, immutable) - Marca temporal en hora local del fundo
+//   - corral_id: int (optional, 1..100, immutable) - Identificador de corral o ternerera
+//
+// Collection: alertas
+// Document ID: {alertaId}
+// Fields:
+//   - sensor_id: int (required, > 0, immutable) - ID del sensor que originó la alerta
+//   - tipo_alerta: string (required, enum ['ESTRES_FRIO_TERNERO', 'ESTRES_CALOR_TERNERO', 'CAMAS_CALIENTES_HUMEDAD'], immutable)
+//   - nivel: string (required, enum ['ROJO', 'AMARILLO', 'VERDE'], immutable) - Criticidad sanitaria
+//   - mensaje: string (required, 1..500 chars, immutable) - Detalle operativo para ternereros/parteros
+//   - fecha_hora: timestamp or string (required, 1..40 chars if string, immutable) - Fecha de emisión
+//   - estado_lectura: string (required, enum ['PENDIENTE', 'LEIDA', 'RESUELTA']) - Estado de gestión de la alerta
+//
+// Collection: sensores
+// Document ID: {sensorId}
+// Fields:
+//   - ubicacion: string (required, 1..100 chars) - Ubicación física (ej. Ternerera 1, Sala Ordeña)
+//   - tipo: string (required, 1..50 chars) - Tipo de sensor (ej. DHT22_TEMP_HUM, RFID_BAJADA)
+//   - estado: string (required, enum ['ACTIVO', 'INACTIVO', 'REVISAR']) - Estado operacional del dispositivo
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    // Check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if user owns the resource (for user-owned documents)
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Check if user is owner based on document's uid field
+    function isDocOwner() {
+      return isAuthenticated() && request.auth.uid == resource.data.uid;
+    }
+
+    // Verify UID hasn't been tampered with on create
+    function uidUnchanged() {
+      return !('uid' in request.resource.data) ||
+        request.resource.data.uid == request.auth.uid;
+    }
+
+    // Ensure uid field is not modified on update
+    function uidNotModified() {
+      return !('uid' in request.resource.data) ||
+        request.resource.data.uid == resource.data.uid;
+    }
+
+    // Check if user has administrative privileges via trusted custom claims
+    function isAdmin() {
+      return isAuthenticated() && (
+        (('admin' in request.auth.token) && request.auth.token.admin == true) ||
+        (('rol' in request.auth.token) && request.auth.token.rol in ['ADMINISTRADOR', 'VETERINARIO'])
+      );
+    }
+
+    // Check if user is authorized operational staff or admin
+    function isStaff() {
+      return isAuthenticated() && (
+        isAdmin() ||
+        (('rol' in request.auth.token) && request.auth.token.rol in ['PARTERO', 'TERNERERO', 'LECHERO'])
+      );
+    }
+
+    // Validate required fields exist
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    // Validate that the document contains only the allowed fields
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // Validate string length
+    function validStringLength(field, minLen, maxLen) {
+      return request.resource.data[field] is string &&
+        request.resource.data[field].size() >= minLen &&
+        request.resource.data[field].size() <= maxLen;
+    }
+
+    // Validate optional string (if present, must be string and within length)
+    function isValidOptionalString(field, minLen, maxLen) {
+      return !(field in request.resource.data) ||
+        (request.resource.data[field] is string &&
+         request.resource.data[field].size() >= minLen &&
+         request.resource.data[field].size() <= maxLen);
+    }
+
+    // Validate that the document hasn't changed in the fields that are not allowed to be changed
+    function areImmutableFieldsUnchanged(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+
+    // Validate that a numeric value is positive
+    function isPositive(field) {
+      return (request.resource.data[field] is int || request.resource.data[field] is float) &&
+        request.resource.data[field] > 0;
+    }
+
+    // ===============================================================
+    // Domain Validators (Used in BOTH create and update)
+    // ===============================================================
+
+    function isValidTelemetria(data) {
+      return hasOnlyAllowedFields([
+          'dispositivo',
+          'temperatura_celsius',
+          'humedad_ambiente_pct',
+          'timestamp',
+          'fecha_local',
+          'corral_id'
+        ]) &&
+        hasRequiredFields([
+          'dispositivo',
+          'temperatura_celsius',
+          'humedad_ambiente_pct',
+          'timestamp'
+        ]) &&
+        validStringLength('dispositivo', 1, 64) &&
+        (data.temperatura_celsius is int || data.temperatura_celsius is float) &&
+        data.temperatura_celsius >= -20 &&
+        data.temperatura_celsius <= 70 &&
+        (data.humedad_ambiente_pct is int || data.humedad_ambiente_pct is float) &&
+        data.humedad_ambiente_pct >= 0 &&
+        data.humedad_ambiente_pct <= 100 &&
+        (data.timestamp is timestamp || validStringLength('timestamp', 1, 40)) &&
+        isValidOptionalString('fecha_local', 1, 40) &&
+        (!('corral_id' in data) || (data.corral_id is int && data.corral_id >= 1 && data.corral_id <= 100));
+    }
+
+    function isValidAlerta(data) {
+      return hasOnlyAllowedFields([
+          'sensor_id',
+          'tipo_alerta',
+          'nivel',
+          'mensaje',
+          'fecha_hora',
+          'estado_lectura'
+        ]) &&
+        hasRequiredFields([
+          'sensor_id',
+          'tipo_alerta',
+          'nivel',
+          'mensaje',
+          'fecha_hora',
+          'estado_lectura'
+        ]) &&
+        data.sensor_id is int &&
+        data.sensor_id > 0 &&
+        data.tipo_alerta is string &&
+        data.tipo_alerta in [
+          'ESTRES_FRIO_TERNERO',
+          'ESTRES_CALOR_TERNERO',
+          'CAMAS_CALIENTES_HUMEDAD'
+        ] &&
+        data.nivel is string &&
+        data.nivel in ['ROJO', 'AMARILLO', 'VERDE'] &&
+        validStringLength('mensaje', 1, 500) &&
+        (data.fecha_hora is timestamp || validStringLength('fecha_hora', 1, 40)) &&
+        data.estado_lectura is string &&
+        data.estado_lectura in ['PENDIENTE', 'LEIDA', 'RESUELTA'];
+    }
+
+    function isValidAlertaStateTransition() {
+      let prev = resource.data.estado_lectura;
+      let next = request.resource.data.estado_lectura;
+      return (prev == 'PENDIENTE' && next in ['LEIDA', 'RESUELTA']) ||
+             (prev == 'LEIDA' && next == 'RESUELTA');
+    }
+
+    function isValidSensor(data) {
+      return hasOnlyAllowedFields(['ubicacion', 'tipo', 'estado']) &&
+        hasRequiredFields(['ubicacion', 'tipo', 'estado']) &&
+        validStringLength('ubicacion', 1, 100) &&
+        validStringLength('tipo', 1, 50) &&
+        data.estado is string &&
+        data.estado in ['ACTIVO', 'INACTIVO', 'REVISAR'];
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    // Telemetry records from IoT nodes (ESP8266 + DHT22)
+    // Note: Firebase Admin SDK in Django/Raspberry Pi bypasses rules for server ingestion.
+    match /telemetria/{registroId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin() && isValidTelemetria(request.resource.data);
+      allow update: if isAdmin() &&
+        isValidTelemetria(request.resource.data) &&
+        areImmutableFieldsUnchanged([
+          'dispositivo',
+          'temperatura_celsius',
+          'humedad_ambiente_pct',
+          'timestamp',
+          'fecha_local',
+          'corral_id'
+        ]);
+      allow delete: if isAdmin();
+    }
+
+    // Sanitary & environmental alerts for calf sheds and milking parlor
+    match /alertas/{alertaId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin() && isValidAlerta(request.resource.data);
+      allow update: if isValidAlerta(request.resource.data) && (
+        isAdmin() ||
+        (isStaff() &&
+         areImmutableFieldsUnchanged([
+           'sensor_id',
+           'tipo_alerta',
+           'nivel',
+           'mensaje',
+           'fecha_hora'
+         ]) &&
+         isValidAlertaStateTransition())
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Sensor inventory and operational status
+    match /sensores/{sensorId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin() && isValidSensor(request.resource.data);
+      allow update: if isAdmin() && isValidSensor(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // Default deny for all other paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

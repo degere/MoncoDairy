@@ -53,11 +53,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDyXCkJLwSXyPr4v-1KmxdaHYbE6kLXcbE',
-    appId: '1:10164404657:android:62bccb2e66d0741d2f7d90',
-    messagingSenderId: '10164404657',
-    projectId: 'appmoncopullisensores',
-    databaseURL: 'https://appmoncopullisensores-default-rtdb.firebaseio.com',
-    storageBucket: 'appmoncopullisensores.firebasestorage.app',
+    apiKey: 'AIzaSyDKuPGJ1VbeamkjNm9J0RkNlA_ct4Tzkg8',
+    appId: '1:915388982450:android:d3bcd80c17b77c110b15ab',
+    messagingSenderId: '915388982450',
+    projectId: 'cuidado-de-vacas',
+    databaseURL: 'https://cuidado-de-vacas-default-rtdb.firebaseio.com',
+    storageBucket: 'cuidado-de-vacas.firebasestorage.app',
   );
 }

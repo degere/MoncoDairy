@@ -1,0 +1,274 @@
+Creating test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+Found 48 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: messages, rest_framework, staticfiles
+  Apply all migrations: admin, auth, contenttypes, sensores, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying sensores.0001_initial... OK
+  Applying sessions.0001_initial...test_P040_registro_valido_hashea_pin (sensores.tests_eva3.AuthPINTests.test_P040_registro_valido_hashea_pin) ... ok
+test_P041_registro_pin_invalido (sensores.tests_eva3.AuthPINTests.test_P041_registro_pin_invalido) ... ok
+test_P042_registro_email_duplicado_y_rol_inexistente (sensores.tests_eva3.AuthPINTests.test_P042_registro_email_duplicado_y_rol_inexistente) ... ok
+test_P043_registro_sin_autenticacion_no_debe_crear_administradores (sensores.tests_eva3.AuthPINTests.test_P043_registro_sin_autenticacion_no_debe_crear_administradores) ... FAIL
+test_P044_login_correcto_devuelve_permisos_del_rol (sensores.tests_eva3.AuthPINTests.test_P044_login_correcto_devuelve_permisos_del_rol) ... ok
+test_P045_login_pin_incorrecto (sensores.tests_eva3.AuthPINTests.test_P045_login_pin_incorrecto) ... Intento fallido de login por PIN para el usuario: ana@moncopulli.cl
+ok
+test_P046_login_usuario_inactivo (sensores.tests_eva3.AuthPINTests.test_P046_login_usuario_inactivo) ... ok
+test_P047_mensaje_no_permite_enumerar_usuarios (sensores.tests_eva3.AuthPINTests.test_P047_mensaje_no_permite_enumerar_usuarios) ... Intento fallido de login por PIN para el usuario: ana@moncopulli.cl
+FAIL
+test_P048_bloqueo_tras_intentos_fallidos (sensores.tests_eva3.AuthPINTests.test_P048_bloqueo_tras_intentos_fallidos) ... Intento fallido de login por PIN para el usuario: ana@moncopulli.cl
+Intento fallido de login por PIN para el usuario: ana@moncopulli.cl
+Intento fallido de login por PIN para el usuario: ana@moncopulli.cl
+Intento fallido de login por PIN para el usuario: ana@moncopulli.cl
+Intento fallido de login por PIN para el usuario: ana@moncopulli.cl
+Intento fallido de login por PIN para el usuario: ana@moncopulli.cl
+Intento fallido de login por PIN para el usuario: ana@moncopulli.cl
+Intento fallido de login por PIN para el usuario: ana@moncopulli.cl
+Intento fallido de login por PIN para el usuario: ana@moncopulli.cl
+Intento fallido de login por PIN para el usuario: ana@moncopulli.cl
+FAIL
+test_P049_inyeccion_sql_en_login (sensores.tests_eva3.AuthPINTests.test_P049_inyeccion_sql_en_login) ... ok
+test_P050_xss_en_nombre_se_almacena_literal (sensores.tests_eva3.AuthPINTests.test_P050_xss_en_nombre_se_almacena_literal) ... ok
+test_P051_login_entrega_token_para_autorizar_peticiones (sensores.tests_eva3.AuthPINTests.test_P051_login_entrega_token_para_autorizar_peticiones) ... FAIL
+test_P060_debug_desactivado_fuera_de_desarrollo (sensores.tests_eva3.ConfiguracionTests.test_P060_debug_desactivado_fuera_de_desarrollo) ... FAIL
+test_P061_secret_key_no_es_la_generada_por_defecto (sensores.tests_eva3.ConfiguracionTests.test_P061_secret_key_no_es_la_generada_por_defecto) ... FAIL
+test_P062_allowed_hosts_no_es_comodin (sensores.tests_eva3.ConfiguracionTests.test_P062_allowed_hosts_no_es_comodin) ... ok
+test_P063_rest_framework_define_autenticacion_y_permisos (sensores.tests_eva3.ConfiguracionTests.test_P063_rest_framework_define_autenticacion_y_permisos) ... FAIL
+test_P001_lectura_normal_se_guarda_sin_alerta (sensores.tests_eva3.IngestaIoTTests.test_P001_lectura_normal_se_guarda_sin_alerta) ... ok
+test_P002_bordes_temperatura_aceptados (sensores.tests_eva3.IngestaIoTTests.test_P002_bordes_temperatura_aceptados) ... Push enviado a parteros/ternereros: Frío crítico (-20.0°C) en Sala de partos
+ok
+test_P003_fuera_de_rango_temperatura_rechazado_y_no_guardado (sensores.tests_eva3.IngestaIoTTests.test_P003_fuera_de_rango_temperatura_rechazado_y_no_guardado) ... Lectura anómala descartada del sensor 1: -20.01 °C
+Lectura anómala descartada del sensor 1: 45.01 °C
+Lectura anómala descartada del sensor 1: 200.0 °C
+ok
+test_P004_bordes_y_fuera_de_rango_humedad (sensores.tests_eva3.IngestaIoTTests.test_P004_bordes_y_fuera_de_rango_humedad) ... Push enviado a ternereros: Recambio de paja requerido en Ternerera 1
+Lectura anómala descartada del sensor 2: 100.1 %
+Lectura anómala descartada del sensor 2: -0.1 %
+ok
+test_P005_parametros_faltantes (sensores.tests_eva3.IngestaIoTTests.test_P005_parametros_faltantes) ... ok
+test_P006_valor_no_numerico_o_nan (sensores.tests_eva3.IngestaIoTTests.test_P006_valor_no_numerico_o_nan) ... Lectura anómala descartada del sensor 1: nan °C
+Lectura anómala descartada del sensor 2: inf %
+ok
+test_P007_sensor_inexistente_e_inyeccion_sql (sensores.tests_eva3.IngestaIoTTests.test_P007_sensor_inexistente_e_inyeccion_sql) ... ok
+test_P008_unidad_desconocida_debe_rechazarse (sensores.tests_eva3.IngestaIoTTests.test_P008_unidad_desconocida_debe_rechazarse) ... FAIL
+test_P009_unidad_desconocida_con_valor_enorme_no_debe_dar_500 (sensores.tests_eva3.IngestaIoTTests.test_P009_unidad_desconocida_con_valor_enorme_no_debe_dar_500) ... FAIL
+test_P010_xss_en_unidad_debe_rechazarse (sensores.tests_eva3.IngestaIoTTests.test_P010_xss_en_unidad_debe_rechazarse) ... FAIL
+test_P011_alerta_frio_rojo (sensores.tests_eva3.IngestaIoTTests.test_P011_alerta_frio_rojo) ... Push enviado a parteros/ternereros: Frío crítico (9.9°C) en Sala de partos
+ok
+test_P012_alerta_calor_amarillo_y_borde_25 (sensores.tests_eva3.IngestaIoTTests.test_P012_alerta_calor_amarillo_y_borde_25) ... ok
+test_P013_alerta_humedad_cama_borde_80 (sensores.tests_eva3.IngestaIoTTests.test_P013_alerta_humedad_cama_borde_80) ... Push enviado a ternereros: Recambio de paja requerido en Ternerera 1
+ok
+test_P014_HU002_una_lectura_aislada_no_debe_alertar (sensores.tests_eva3.IngestaIoTTests.test_P014_HU002_una_lectura_aislada_no_debe_alertar) ... Push enviado a ternereros: Recambio de paja requerido en Ternerera 1
+FAIL
+test_P015_HU001_calculo_THI_en_patio (sensores.tests_eva3.IngestaIoTTests.test_P015_HU001_calculo_THI_en_patio) ... Push enviado a ternereros: Recambio de paja requerido en Ternerera 1
+FAIL
+test_P016_ingesta_sin_autenticacion_debe_rechazarse (sensores.tests_eva3.IngestaIoTTests.test_P016_ingesta_sin_autenticacion_debe_rechazarse) ... FAIL
+test_P017_sensor_inactivo_no_debe_aceptar_lecturas (sensores.tests_eva3.IngestaIoTTests.test_P017_sensor_inactivo_no_debe_aceptar_lecturas) ... FAIL
+test_P018_estres_300_lecturas_secuenciales (sensores.tests_eva3.IngestaIoTTests.test_P018_estres_300_lecturas_secuenciales) ... ok
+test_P020_codigo_ausente (sensores.tests_eva3.RFIDBloqueoTests.test_P020_codigo_ausente) ... ok
+test_P021_rfid_inexistente (sensores.tests_eva3.RFIDBloqueoTests.test_P021_rfid_inexistente) ... ok
+test_P022_collar_inactivo (sensores.tests_eva3.RFIDBloqueoTests.test_P022_collar_inactivo) ... ok
+test_P023_collar_sin_animal (sensores.tests_eva3.RFIDBloqueoTests.test_P023_collar_sin_animal) ... ok
+test_P024_vaca_sana_habilitada (sensores.tests_eva3.RFIDBloqueoTests.test_P024_vaca_sana_habilitada) ... ok
+test_P025_tratamiento_activo_bloquea (sensores.tests_eva3.RFIDBloqueoTests.test_P025_tratamiento_activo_bloquea) ... ok
+test_P026_periodo_de_resguardo_vigente_debe_bloquear (sensores.tests_eva3.RFIDBloqueoTests.test_P026_periodo_de_resguardo_vigente_debe_bloquear) ... FAIL
+test_P027_tratamiento_terminado_habilita (sensores.tests_eva3.RFIDBloqueoTests.test_P027_tratamiento_terminado_habilita) ... ok
+test_P028_tratamiento_sin_bloqueo_no_bloquea (sensores.tests_eva3.RFIDBloqueoTests.test_P028_tratamiento_sin_bloqueo_no_bloquea) ... ok
+test_P029_inyeccion_sql_en_rfid (sensores.tests_eva3.RFIDBloqueoTests.test_P029_inyeccion_sql_en_rfid) ... ok
+test_P030_cliente_no_puede_forzar_desbloqueo (sensores.tests_eva3.RFIDBloqueoTests.test_P030_cliente_no_puede_forzar_desbloqueo) ... ok
+test_P031_bajada_fuera_de_rango_1_38 (sensores.tests_eva3.RFIDBloqueoTests.test_P031_bajada_fuera_de_rango_1_38) ... FAIL
+test_P032_tratamiento_anterior_no_se_pierde_al_registrar_nuevo_evento (sensores.tests_eva3.RFIDBloqueoTests.test_P032_tratamiento_anterior_no_se_pierde_al_registrar_nuevo_evento) ... FAIL
+test_P033_rfid_sin_autenticacion_debe_rechazarse (sensores.tests_eva3.RFIDBloqueoTests.test_P033_rfid_sin_autenticacion_debe_rechazarse) ... FAIL
+
+======================================================================
+FAIL: test_P043_registro_sin_autenticacion_no_debe_crear_administradores (sensores.tests_eva3.AuthPINTests.test_P043_registro_sin_autenticacion_no_debe_crear_administradores)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 263, in test_P043_registro_sin_autenticacion_no_debe_crear_administradores
+    self.assertIn(r.status_code, (401, 403))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 201 not found in (401, 403)
+
+======================================================================
+FAIL: test_P047_mensaje_no_permite_enumerar_usuarios (sensores.tests_eva3.AuthPINTests.test_P047_mensaje_no_permite_enumerar_usuarios)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 281, in test_P047_mensaje_no_permite_enumerar_usuarios
+    self.assertEqual(r_noexiste.data, r_pinmalo.data)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'error': 'Credenciales inválidas o usuario inactivo.'} != {'error': 'PIN incorrecto.'}
+- {'error': 'Credenciales inválidas o usuario inactivo.'}
++ {'error': 'PIN incorrecto.'}
+
+======================================================================
+FAIL: test_P048_bloqueo_tras_intentos_fallidos (sensores.tests_eva3.AuthPINTests.test_P048_bloqueo_tras_intentos_fallidos)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 288, in test_P048_bloqueo_tras_intentos_fallidos
+    self.assertIn(r.status_code, (403, 423, 429))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 200 not found in (403, 423, 429)
+
+======================================================================
+FAIL: test_P051_login_entrega_token_para_autorizar_peticiones (sensores.tests_eva3.AuthPINTests.test_P051_login_entrega_token_para_autorizar_peticiones)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 304, in test_P051_login_entrega_token_para_autorizar_peticiones
+    self.assertTrue(any(k in r.data for k in ('token', 'access', 'access_token')))
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_P060_debug_desactivado_fuera_de_desarrollo (sensores.tests_eva3.ConfiguracionTests.test_P060_debug_desactivado_fuera_de_desarrollo)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 311, in test_P060_debug_desactivado_fuera_de_desarrollo
+    self.assertFalse(import_module(settings.SETTINGS_MODULE).DEBUG)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_P061_secret_key_no_es_la_generada_por_defecto (sensores.tests_eva3.ConfiguracionTests.test_P061_secret_key_no_es_la_generada_por_defecto)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 314, in test_P061_secret_key_no_es_la_generada_por_defecto
+    self.assertFalse(settings.SECRET_KEY.startswith('django-insecure-'))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_P063_rest_framework_define_autenticacion_y_permisos (sensores.tests_eva3.ConfiguracionTests.test_P063_rest_framework_define_autenticacion_y_permisos)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 321, in test_P063_rest_framework_define_autenticacion_y_permisos
+    self.assertIn('DEFAULT_PERMISSION_CLASSES', conf)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'DEFAULT_PERMISSION_CLASSES' not found in {}
+
+======================================================================
+FAIL: test_P008_unidad_desconocida_debe_rechazarse (sensores.tests_eva3.IngestaIoTTests.test_P008_unidad_desconocida_debe_rechazarse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 85, in test_P008_unidad_desconocida_debe_rechazarse
+    self.assertEqual(r.status_code, 400)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 201 != 400
+
+======================================================================
+FAIL: test_P009_unidad_desconocida_con_valor_enorme_no_debe_dar_500 (sensores.tests_eva3.IngestaIoTTests.test_P009_unidad_desconocida_con_valor_enorme_no_debe_dar_500)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 90, in test_P009_unidad_desconocida_con_valor_enorme_no_debe_dar_500
+    self.assertEqual(r.status_code, 400)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 201 != 400
+
+======================================================================
+FAIL: test_P010_xss_en_unidad_debe_rechazarse (sensores.tests_eva3.IngestaIoTTests.test_P010_xss_en_unidad_debe_rechazarse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 94, in test_P010_xss_en_unidad_debe_rechazarse
+    self.assertEqual(r.status_code, 400)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 201 != 400
+
+======================================================================
+FAIL: test_P014_HU002_una_lectura_aislada_no_debe_alertar (sensores.tests_eva3.IngestaIoTTests.test_P014_HU002_una_lectura_aislada_no_debe_alertar)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 117, in test_P014_HU002_una_lectura_aislada_no_debe_alertar
+    self.assertEqual(Alerta.objects.count(), 0)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_P015_HU001_calculo_THI_en_patio (sensores.tests_eva3.IngestaIoTTests.test_P015_HU001_calculo_THI_en_patio)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 123, in test_P015_HU001_calculo_THI_en_patio
+    self.assertTrue(Alerta.objects.filter(tipo_alerta__icontains='THI').exists())
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_P016_ingesta_sin_autenticacion_debe_rechazarse (sensores.tests_eva3.IngestaIoTTests.test_P016_ingesta_sin_autenticacion_debe_rechazarse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 128, in test_P016_ingesta_sin_autenticacion_debe_rechazarse
+    self.assertIn(r.status_code, (401, 403))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 201 not found in (401, 403)
+
+======================================================================
+FAIL: test_P017_sensor_inactivo_no_debe_aceptar_lecturas (sensores.tests_eva3.IngestaIoTTests.test_P017_sensor_inactivo_no_debe_aceptar_lecturas)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 133, in test_P017_sensor_inactivo_no_debe_aceptar_lecturas
+    self.assertIn(self.ingesta(s.id, 18, '°C').status_code, (400, 403, 404))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 201 not found in (400, 403, 404)
+
+======================================================================
+FAIL: test_P026_periodo_de_resguardo_vigente_debe_bloquear (sensores.tests_eva3.RFIDBloqueoTests.test_P026_periodo_de_resguardo_vigente_debe_bloquear)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 189, in test_P026_periodo_de_resguardo_vigente_debe_bloquear
+    self.assertTrue(self.rfid('RFID-0001').data['bloquear_ordenia'])
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_P031_bajada_fuera_de_rango_1_38 (sensores.tests_eva3.RFIDBloqueoTests.test_P031_bajada_fuera_de_rango_1_38)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 210, in test_P031_bajada_fuera_de_rango_1_38
+    self.assertEqual(self.rfid('RFID-0001', bajada=99).status_code, 400)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 200 != 400
+
+======================================================================
+FAIL: test_P032_tratamiento_anterior_no_se_pierde_al_registrar_nuevo_evento (sensores.tests_eva3.RFIDBloqueoTests.test_P032_tratamiento_anterior_no_se_pierde_al_registrar_nuevo_evento)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 219, in test_P032_tratamiento_anterior_no_se_pierde_al_registrar_nuevo_evento
+    self.assertTrue(self.rfid('RFID-0001').data['bloquear_ordenia'])
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_P033_rfid_sin_autenticacion_debe_rechazarse (sensores.tests_eva3.RFIDBloqueoTests.test_P033_rfid_sin_autenticacion_debe_rechazarse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\kjksd\AppData\Local\Temp\eva3work\wt\django\sensores\tests_eva3.py", line 222, in test_P033_rfid_sin_autenticacion_debe_rechazarse
+    self.assertIn(self.rfid('RFID-0001').status_code, (401, 403))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 200 not found in (401, 403)
+
+----------------------------------------------------------------------
+Ran 48 tests in 7.787s
+
+FAILED (failures=18)
+Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+ OK
+System check identified no issues (0 silenced).
+
+[MEDICION P018] 300 POST en 0.19 s (1561.0 req/s, cliente de pruebas en proceso)

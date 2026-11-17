@@ -1,30 +1,35 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:moncodairy_sense/data/telemetria_registro.dart';
 import 'package:moncodairy_sense/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Muestra la pantalla de login', (WidgetTester tester) async {
+    await tester.pumpWidget(const MoncoDairyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('MoncoDairy Sense'), findsOneWidget);
+    expect(find.text('ENTRAR'), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  test('TelemetriaRegistro acepta el formato del simulador DHT22', () {
+    final r = TelemetriaRegistro.tryParse('-Nabc', {
+      'dispositivo': {'node_id': 'NODE-PARTOS-02'},
+      'lecturas_crudas': {'temperatura_celsius': 18, 'humedad_ambiente_pct': 64.5},
+    });
+    expect(r, isNotNull);
+    expect(r!.dispositivo, 'NODE-PARTOS-02');
+    expect(r.temperaturaC, 18.0);
+    expect(r.humedadPct, 64.5);
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  test('TelemetriaRegistro descarta lecturas fuera de rango o incompletas', () {
+    expect(TelemetriaRegistro.tryParse('x', {'dispositivo': 'a'}), isNull);
+    expect(
+      TelemetriaRegistro.tryParse('x', {
+        'dispositivo': 'a',
+        'lecturas_crudas': {'temperatura_celsius': 200, 'humedad_ambiente_pct': 50},
+      }),
+      isNull,
+    );
   });
 }

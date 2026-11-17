@@ -8,8 +8,10 @@ import '../models/models.dart';
 import 'repository.dart';
 import 'telemetria_registro.dart';
 
-const String kDatabaseUrl = 'https://appmoncopullisensores-default-rtdb.firebaseio.com';
-const String kNodoTelemetria = 'telemetria';
+const String kDatabaseUrl = 'https://cuidado-de-vacas-default-rtdb.firebaseio.com';
+
+/// Ruta donde el simulador / ESP32 publica: /buffer_sensores_terreno/<node_id>/<push_id>
+const String kNodoTelemetria = 'buffer_sensores_terreno/NODE-PARTOS-02';
 
 /// Corral que hoy recibe las lecturas reales del sensor DHT22.
 const int kCorralConSensorReal = 1;
@@ -44,7 +46,7 @@ class FirebaseRepository extends MockRepository {
     return FirebaseRepository._(db);
   }
 
-  /// Ultimo registro de /telemetria; null si no hay o el ultimo no es valido.
+  /// Ultimo registro de [kNodoTelemetria]; null si no hay o el ultimo no es valido.
   Stream<TelemetriaRegistro?> _ultimoRegistro() {
     final ref = _db.ref(kNodoTelemetria);
     final campo = kCampoOrden;

@@ -3,7 +3,6 @@
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
@@ -19,7 +18,6 @@ class Alerta(models.Model):
     estado_lectura = models.CharField(max_length=30)
 
     class Meta:
-        managed = False
         db_table = 'alerta'
 
 
@@ -31,7 +29,6 @@ class Animal(models.Model):
     estado = models.CharField(max_length=30)
 
     class Meta:
-        managed = False
         db_table = 'animal'
 
 
@@ -40,7 +37,6 @@ class CollarRfid(models.Model):
     activo = models.BooleanField()
 
     class Meta:
-        managed = False
         db_table = 'collar_rfid'
 
 
@@ -52,7 +48,6 @@ class EventoSanitario(models.Model):
     gravedad = models.CharField(max_length=20)
 
     class Meta:
-        managed = False
         db_table = 'evento_sanitario'
 
 
@@ -64,7 +59,6 @@ class LecturaSensor(models.Model):
     fecha_hora = models.DateTimeField()
 
     class Meta:
-        managed = False
         db_table = 'lectura_sensor'
 
 
@@ -75,7 +69,6 @@ class RegistroOffline(models.Model):
     sincronizado = models.BooleanField()
 
     class Meta:
-        managed = False
         db_table = 'registro_offline'
 
 
@@ -84,7 +77,6 @@ class Rol(models.Model):
     descripcion = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'rol'
 
 
@@ -94,7 +86,6 @@ class Sensor(models.Model):
     estado = models.CharField(max_length=30)
 
     class Meta:
-        managed = False
         db_table = 'sensor'
 
 
@@ -108,7 +99,6 @@ class Tratamiento(models.Model):
     bloqueo_leche = models.BooleanField()
 
     class Meta:
-        managed = False
         db_table = 'tratamiento'
 
 
@@ -120,5 +110,4 @@ class Usuario(models.Model):
     activo = models.BooleanField()
 
     class Meta:
-        managed = False
         db_table = 'usuario'

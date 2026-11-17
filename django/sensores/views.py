@@ -28,10 +28,13 @@ class IngestaIoTAPIView(APIView):
 
         try:
             sensor = Sensor.objects.get(id=sensor_id)
-        except Sensor.DoesNotExist:
+        except (Sensor.DoesNotExist, ValueError, TypeError):
             return Response({"error": "El sensor especificado no existe."}, status=status.HTTP_404_NOT_FOUND)
 
-        val_float = float(valor)
+        try:
+            val_float = float(valor)
+        except (TypeError, ValueError):
+            return Response({"error": "'valor' debe ser numérico."}, status=status.HTTP_400_BAD_REQUEST)
 
         # 1. Filtro de Rango Físico
         if not self._validar_rango_fisico(unidad, val_float):
@@ -207,4 +210,4 @@ class RegistroUsuarioPINAPIView(APIView):
                 "usuario": UsuarioSerializer(usuario).data
             }, status=status.HTTP_201_CREATED)
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

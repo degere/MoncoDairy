@@ -1,7 +1,7 @@
 /// Un registro de /telemetria/$registro_id ya validado.
 ///
 /// Estructura esperada en Realtime Database:
-///   dispositivo: String
+///   dispositivo: { node_id: String, ... }   (tambien se acepta un String)
 ///   lecturas_crudas: { temperatura_celsius: double, humedad_ambiente_pct: double }
 class TelemetriaRegistro {
   final String id;
@@ -28,8 +28,13 @@ class TelemetriaRegistro {
 
     final t = lecturas['temperatura_celsius'];
     final h = lecturas['humedad_ambiente_pct'];
-    final disp = raw['dispositivo'];
-    if (t is! num || h is! num || disp is! String) return null;
+    final rawDisp = raw['dispositivo'];
+    final String? disp = rawDisp is String
+        ? rawDisp
+        : (rawDisp is Map && rawDisp['node_id'] is String)
+            ? rawDisp['node_id'] as String
+            : null;
+    if (t is! num || h is! num || disp == null) return null;
 
     final temp = t.toDouble();
     final hum = h.toDouble();

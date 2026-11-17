@@ -10,6 +10,7 @@ dependencies:
   firebase_auth: ^7.0.1
   firebase_core: ^5.1.0
   firebase_database: ^13.0.1
+  http: ^1.2.0
   flutter:
     sdk: flutter
   # Cuando conectes el backend, agrega:

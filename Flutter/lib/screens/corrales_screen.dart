@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/theme.dart';
+import '../data/api_repository.dart';
 import '../data/repository.dart';
 import '../models/models.dart';
 import '../widgets/common.dart';
@@ -78,7 +79,8 @@ class _ErrorConexion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sinPermiso = error.toString().contains('permission-denied');
+    final e = error;
+    final mensaje = e is ApiException ? e.mensaje : 'No se pudo conectar con los sensores.';
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -88,9 +90,7 @@ class _ErrorConexion extends StatelessWidget {
             const Icon(Icons.cloud_off, size: 48, color: AppColors.textMuted),
             const SizedBox(height: 8),
             Text(
-              sinPermiso
-                  ? 'Sin permiso para leer los sensores. Revisa las reglas de Firebase y el inicio de sesión.'
-                  : 'No se pudo conectar con los sensores.',
+              mensaje,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
@@ -119,7 +119,10 @@ class _CorralCard extends StatelessWidget {
             children: [
               Text(corral.nombre,
                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.green)),
-              if (corral.enVivo) const Pill('EN VIVO', bg: AppColors.greenSoft, fg: AppColors.green),
+              if (corral.enVivo)
+                const Pill('EN VIVO', bg: AppColors.greenSoft, fg: AppColors.green)
+              else if (corral.antiguedadSegundos != null)
+                const Pill('SIN DATOS RECIENTES', bg: AppColors.orangeSoft, fg: AppColors.orange),
             ],
           ),
           _fila('Humedad', '${corral.humedad.toStringAsFixed(0)}%'),

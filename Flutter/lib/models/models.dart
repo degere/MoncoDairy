@@ -7,8 +7,11 @@ class Corral {
   final double humedad;
   final double temperatura;
 
-  /// true cuando humedad/temperatura vienen de Firebase (sensor real).
+  /// true cuando humedad/temperatura vienen del sensor real y son recientes (Django: en_vivo).
   final bool enVivo;
+
+  /// Segundos desde la lectura real más vieja; null si el dato es simulado.
+  final int? antiguedadSegundos;
 
   /// Dispositivo que envio la lectura real (campo `dispositivo` de /telemetria).
   final String? dispositivo;
@@ -20,6 +23,7 @@ class Corral {
     required this.humedad,
     required this.temperatura,
     this.enVivo = false,
+    this.antiguedadSegundos,
     this.dispositivo,
   });
 

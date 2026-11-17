@@ -26,6 +26,13 @@ class _CorralDetailScreenState extends State<CorralDetailScreen> {
     );
   }
 
+  static String _hace(int s) {
+    if (s < 60) return '$s s';
+    if (s < 3600) return '${s ~/ 60} min';
+    if (s < 86400) return '${s ~/ 3600} h';
+    return '${s ~/ 86400} d';
+  }
+
   Widget _contenido(BuildContext context, Corral corral, bool error) {
     final critico = corral.nivelHumedad == Nivel.critico;
     return Scaffold(
@@ -43,7 +50,9 @@ class _CorralDetailScreenState extends State<CorralDetailScreen> {
                   ? 'Sin conexión: mostrando el último dato recibido'
                   : corral.enVivo
                       ? 'En tiempo real · ${corral.dispositivo ?? 'sensor'}'
-                      : 'Datos simulados',
+                      : corral.antiguedadSegundos != null
+                          ? 'Sin datos recientes · última lectura hace ${_hace(corral.antiguedadSegundos!)}'
+                          : 'Datos simulados',
               style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
           const SizedBox(height: 14),
           if (critico) ...[

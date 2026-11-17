@@ -8,6 +8,9 @@ abstract class Repository {
   static Repository instance = MockRepository();
 
   Future<bool> login(String usuario, String pin);
+
+  /// Motivo del último login fallido (null si no hay o es el genérico).
+  String? get ultimoErrorLogin;
   Future<List<Corral>> getCorrales();
   Future<List<Sensor>> getSensores();
   Future<List<Aviso>> getAvisos();
@@ -23,6 +26,9 @@ abstract class Repository {
 }
 
 class MockRepository implements Repository {
+  @override
+  String? get ultimoErrorLogin => null;
+
   static const _hum = [82, 65, 85, 70, 55, 78, 62, 90, 48, 73, 80, 58, 88, 66, 52, 76, 83, 60, 68, 79];
   static const _temp = [9, 12, 8, 11, 14, 10, 13, 7, 15, 11, 9, 13, 8, 12, 14, 10, 9, 13, 12, 10];
 

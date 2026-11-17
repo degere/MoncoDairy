@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'core/theme.dart';
-import 'data/firebase_repository.dart';
+import 'data/api_repository.dart';
 import 'data/repository.dart';
 import 'screens/login_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    // Conecta con Firebase Realtime Database (lecturas reales de sensores).
-    Repository.instance = await FirebaseRepository.inicializar();
-  } catch (e) {
-    // Si Firebase no esta configurado, la app sigue con datos simulados.
-    debugPrint('Firebase no disponible, usando datos simulados: $e');
-  }
+  // La app solo habla con Django (login real y lecturas del Corral 1). Las lecturas
+  // llegan a Django por el puente Firebase -> Django; la app no toca Firebase.
+  Repository.instance = ApiRepository();
   runApp(const MoncoDairyApp());
 }
 

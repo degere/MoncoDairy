@@ -6,8 +6,8 @@ import 'screens/login_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // La app solo habla con Django (login real y lecturas del Corral 1). Las lecturas
-  // llegan a Django por el puente Firebase -> Django; la app no toca Firebase.
+  // La app solo habla con Django (login real y lecturas de sensores). Django lee
+  // Firebase por su cuenta; la app no toca Firebase.
   Repository.instance = ApiRepository();
   runApp(const MoncoDairyApp());
 }

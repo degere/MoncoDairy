@@ -1,9 +1,8 @@
 import 'dart:math';
 import '../models/models.dart';
 
-/// Contrato de datos de la app. Hoy lo implementa [MockRepository].
-/// Más adelante crea `ApiRepository` (Django: usuarios, historial, cache offline)
-/// y/o `FirebaseRepository` (lecturas de sensores en tiempo real) sin tocar la UI.
+/// Contrato de datos de la app. [ApiRepository] habla con Django (login, corrales,
+/// historial, alertas); [MockRepository] aporta los datos simulados y sirve para tests.
 abstract class Repository {
   static Repository instance = MockRepository();
 

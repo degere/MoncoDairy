@@ -1,0 +1,235 @@
+﻿python.exe : Creating test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+En línea: 1 Carácter: 217
++ ... ython.exe'; & $py manage.py test sensores.tests_eva3_main -v 2 2>&1 | ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Creating test d...che=shared')...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+Found 48 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: corsheaders, django_extensions, django_filters, drf_spectacular, messages, rest_framework, rest_framework_simplejwt, staticfiles
+  Apply all migrations: admin, auth, contenttypes, sensores, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying sensores.0001_initial... OK
+test_M001_lectura_normal_se_guarda_sin_alerta 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M001_lectura_normal_se_guarda_sin_alerta) ... ok
+test_M002_bordes_temperatura_aceptados 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M002_bordes_temperatura_aceptados) ... ok
+test_M003_fuera_de_rango_temperatura_rechazado_y_no_guardado 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M003_fuera_de_rango_temperatura_rechazado_y_no_guardado) ... 
+Lectura an¾mala descartada del sensor 1: -20.01 ░C
+Lectura an¾mala descartada del sensor 1: 45.01 ░C
+Lectura an¾mala descartada del sensor 1: 200.0 ░C
+ok
+test_M004_bordes_y_fuera_de_rango_humedad 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M004_bordes_y_fuera_de_rango_humedad) ... Lectura an¾mala 
+descartada del sensor 2: 100.1 %
+Lectura an¾mala descartada del sensor 2: -0.1 %
+ok
+test_M005_parametros_faltantes_o_no_numericos 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M005_parametros_faltantes_o_no_numericos) ... Lectura an¾mala 
+descartada del sensor 1: nan ░C
+Lectura an¾mala descartada del sensor 2: inf %
+ok
+test_M006_sensor_inexistente_e_inyeccion_sql 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M006_sensor_inexistente_e_inyeccion_sql) ... ok
+test_M007_unidad_desconocida_rechazada 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M007_unidad_desconocida_rechazada) ... Lectura an¾mala descartada 
+del sensor 1: 99999.0 kg
+ok
+test_M008_unidad_con_script_debe_rechazarse 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M008_unidad_con_script_debe_rechazarse) ... FAIL
+test_M009_alerta_frio_rojo_bajo_10 (sensores.tests_eva3_main.AlertasIngestaTests.test_M009_alerta_frio_rojo_bajo_10) 
+... ok
+test_M010_alerta_calor_amarillo_borde_25 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M010_alerta_calor_amarillo_borde_25) ... ok
+test_M011_alerta_camas_calientes_borde_80 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M011_alerta_camas_calientes_borde_80) ... ok
+test_M012_HU002_una_sola_lectura_no_debe_alertar 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M012_HU002_una_sola_lectura_no_debe_alertar) ... FAIL
+test_M013_alerta_repetida_no_se_duplica 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M013_alerta_repetida_no_se_duplica) ... FAIL
+test_M014_sensor_inactivo_no_acepta_lecturas 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M014_sensor_inactivo_no_acepta_lecturas) ... FAIL
+test_M015_una_magnitud_no_inventa_la_otra_en_telemetria 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M015_una_magnitud_no_inventa_la_otra_en_telemetria) ... FAIL
+test_M016_ingesta_exige_sesion (sensores.tests_eva3_main.AlertasIngestaTests.test_M016_ingesta_exige_sesion) ... ok
+test_M017_ingesta_solo_para_dispositivos_autorizados 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M017_ingesta_solo_para_dispositivos_autorizados) ... FAIL
+test_M018_limite_de_tasa_en_ingesta (sensores.tests_eva3_main.AlertasIngestaTests.test_M018_limite_de_tasa_en_ingesta) 
+... ok
+test_M019_estres_lecturas_secuenciales 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M019_estres_lecturas_secuenciales) ... ok
+test_M020_login_correcto_entrega_tokens_y_permisos 
+(sensores.tests_eva3_main.AutenticacionTests.test_M020_login_correcto_entrega_tokens_y_permisos) ... ok
+test_M021_pin_incorrecto_401 (sensores.tests_eva3_main.AutenticacionTests.test_M021_pin_incorrecto_401) ... Intento 
+fallido de login por PIN para el usuario: lechero@prueba.cl
+ok
+test_M022_usuario_inactivo_401 (sensores.tests_eva3_main.AutenticacionTests.test_M022_usuario_inactivo_401) ... ok
+test_M023_mensaje_uniforme_email_inexistente_y_pin_incorrecto 
+(sensores.tests_eva3_main.AutenticacionTests.test_M023_mensaje_uniforme_email_inexistente_y_pin_incorrecto) ... 
+Intento fallido de login por PIN para el usuario: lechero@prueba.cl
+ok
+test_M024_inyeccion_sql_en_login (sensores.tests_eva3_main.AutenticacionTests.test_M024_inyeccion_sql_en_login) ... ok
+test_M025_formato_de_pin_invalido_400 
+(sensores.tests_eva3_main.AutenticacionTests.test_M025_formato_de_pin_invalido_400) ... ok
+test_M026_bloqueo_por_intentos_fallidos 
+(sensores.tests_eva3_main.AutenticacionTests.test_M026_bloqueo_por_intentos_fallidos) ... Intento fallido de login por 
+PIN para el usuario: lechero@prueba.cl
+Intento fallido de login por PIN para el usuario: lechero@prueba.cl
+Intento fallido de login por PIN para el usuario: lechero@prueba.cl
+Intento fallido de login por PIN para el usuario: lechero@prueba.cl
+Intento fallido de login por PIN para el usuario: lechero@prueba.cl
+ok
+test_M027_refresh_renueva_la_sesion (sensores.tests_eva3_main.AutenticacionTests.test_M027_refresh_renueva_la_sesion) 
+... ok
+test_M028_refresh_invalido_401 (sensores.tests_eva3_main.AutenticacionTests.test_M028_refresh_invalido_401) ... ok
+test_M029_token_manipulado_o_ausente_401 
+(sensores.tests_eva3_main.AutenticacionTests.test_M029_token_manipulado_o_ausente_401) ... ok
+test_M030_token_de_usuario_desactivado_deja_de_servir 
+(sensores.tests_eva3_main.AutenticacionTests.test_M030_token_de_usuario_desactivado_deja_de_servir) ... ok
+test_M031_refresh_de_usuario_desactivado_401 
+(sensores.tests_eva3_main.AutenticacionTests.test_M031_refresh_de_usuario_desactivado_401) ... ok
+test_M044_debug_desactivado_por_defecto 
+(sensores.tests_eva3_main.ConfiguracionTests.test_M044_debug_desactivado_por_defecto) ... FAIL
+test_M045_secret_key_no_es_la_de_desarrollo 
+(sensores.tests_eva3_main.ConfiguracionTests.test_M045_secret_key_no_es_la_de_desarrollo) ... ok
+test_M046_allowed_hosts_sin_comodin (sensores.tests_eva3_main.ConfiguracionTests.test_M046_allowed_hosts_sin_comodin) 
+... ok
+test_M047_permiso_por_defecto_exige_autenticacion 
+(sensores.tests_eva3_main.ConfiguracionTests.test_M047_permiso_por_defecto_exige_autenticacion) ... ok
+test_M048_ruta_inexistente_no_expone_rutas 
+(sensores.tests_eva3_main.ConfiguracionTests.test_M048_ruta_inexistente_no_expone_rutas) ... ok
+test_M032_admin_registra_usuario_con_pin_hasheado 
+(sensores.tests_eva3_main.RBACTests.test_M032_admin_registra_usuario_con_pin_hasheado) ... ok
+test_M033_no_admin_no_registra_usuarios (sensores.tests_eva3_main.RBACTests.test_M033_no_admin_no_registra_usuarios) 
+... ok
+test_M034_registro_sin_sesion_rechazado_si_ya_hay_usuarios 
+(sensores.tests_eva3_main.RBACTests.test_M034_registro_sin_sesion_rechazado_si_ya_hay_usuarios) ... ok
+test_M035_politica_de_pin_en_registro (sensores.tests_eva3_main.RBACTests.test_M035_politica_de_pin_en_registro) ... ok
+test_M036_integridad_email_duplicado_y_rol_inexistente 
+(sensores.tests_eva3_main.RBACTests.test_M036_integridad_email_duplicado_y_rol_inexistente) ... ok
+test_M037_nombre_con_script_se_guarda_como_texto 
+(sensores.tests_eva3_main.RBACTests.test_M037_nombre_con_script_se_guarda_como_texto) ... ok
+test_M038_solo_admin_o_veterinario_crean_sensores 
+(sensores.tests_eva3_main.RBACTests.test_M038_solo_admin_o_veterinario_crean_sensores) ... ok
+test_M039_cualquier_rol_autenticado_puede_listar_sensores 
+(sensores.tests_eva3_main.RBACTests.test_M039_cualquier_rol_autenticado_puede_listar_sensores) ... ok
+test_M040_solo_admin_gestiona_roles (sensores.tests_eva3_main.RBACTests.test_M040_solo_admin_gestiona_roles) ... ok
+test_M041_endpoints_protegidos_rechazan_peticiones_sin_sesion 
+(sensores.tests_eva3_main.RBACTests.test_M041_endpoints_protegidos_rechazan_peticiones_sin_sesion) ... ok
+test_M042_alertas_las_ve_cualquier_rol_autenticado 
+(sensores.tests_eva3_main.RBACTests.test_M042_alertas_las_ve_cualquier_rol_autenticado) ... ok
+test_M043_permisos_por_rol_en_el_token (sensores.tests_eva3_main.RBACTests.test_M043_permisos_por_rol_en_el_token) ... 
+ok
+
+======================================================================
+FAIL: test_M008_unidad_con_script_debe_rechazarse 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M008_unidad_con_script_debe_rechazarse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gambo\AppData\Local\Temp\eva3_run\django\sensores\tests_eva3_main.py", line 124, in 
+test_M008_unidad_con_script_debe_rechazarse
+    self.assertEqual(self.ingesta(self.sensor_t, 18, XSS).status_code, 400)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 201 != 400
+
+======================================================================
+FAIL: test_M012_HU002_una_sola_lectura_no_debe_alertar 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M012_HU002_una_sola_lectura_no_debe_alertar)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gambo\AppData\Local\Temp\eva3_run\django\sensores\tests_eva3_main.py", line 150, in 
+test_M012_HU002_una_sola_lectura_no_debe_alertar
+    self.assertEqual(Alerta.objects.count(), 0)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_M013_alerta_repetida_no_se_duplica 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M013_alerta_repetida_no_se_duplica)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gambo\AppData\Local\Temp\eva3_run\django\sensores\tests_eva3_main.py", line 156, in 
+test_M013_alerta_repetida_no_se_duplica
+    self.assertEqual(Alerta.objects.filter(tipo_alerta='CAMAS_CALIENTES_HUMEDAD', estado_lectura='PENDIENTE').count(), 
+1)
+    
+~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 5 != 1
+
+======================================================================
+FAIL: test_M014_sensor_inactivo_no_acepta_lecturas 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M014_sensor_inactivo_no_acepta_lecturas)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gambo\AppData\Local\Temp\eva3_run\django\sensores\tests_eva3_main.py", line 161, in 
+test_M014_sensor_inactivo_no_acepta_lecturas
+    self.assertIn(self.ingesta(self.sensor_t, 18, '░C').status_code, (400, 403, 404))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 201 not found in (400, 403, 404)
+
+======================================================================
+FAIL: test_M015_una_magnitud_no_inventa_la_otra_en_telemetria 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M015_una_magnitud_no_inventa_la_otra_en_telemetria)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gambo\AppData\Local\Temp\eva3_run\django\sensores\tests_eva3_main.py", line 166, in 
+test_M015_una_magnitud_no_inventa_la_otra_en_telemetria
+    self.assertNotEqual(kwargs.get('humedad_ambiente_pct'), 60.0, 'se publico una humedad inventada (60 %)')
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 60.0 == 60.0 : se publico una humedad inventada (60 %)
+
+======================================================================
+FAIL: test_M017_ingesta_solo_para_dispositivos_autorizados 
+(sensores.tests_eva3_main.AlertasIngestaTests.test_M017_ingesta_solo_para_dispositivos_autorizados)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gambo\AppData\Local\Temp\eva3_run\django\sensores\tests_eva3_main.py", line 175, in 
+test_M017_ingesta_solo_para_dispositivos_autorizados
+    self.assertIn(self.ingesta(self.sensor_t, 18, '░C', rol='TERNERERO').status_code, (401, 403))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 201 not found in (401, 403)
+
+======================================================================
+FAIL: test_M044_debug_desactivado_por_defecto 
+(sensores.tests_eva3_main.ConfiguracionTests.test_M044_debug_desactivado_por_defecto)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gambo\AppData\Local\Temp\eva3_run\django\sensores\tests_eva3_main.py", line 338, in 
+test_M044_debug_desactivado_por_defecto
+    self.assertFalse(cfg.DEBUG, 'DEBUG esta activo en la configuracion cargada (.env)')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false : DEBUG esta activo en la configuracion cargada (.env)
+
+----------------------------------------------------------------------
+Ran 48 tests in 0.909s
+
+FAILED (failures=7)
+Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+
+  Applying sessions.0001_initial... OK
+System check identified no issues (0 silenced).
+
+[MEDICION M019] 100 POST aceptados de 100 en 0.18 s (cliente de pruebas en proceso)

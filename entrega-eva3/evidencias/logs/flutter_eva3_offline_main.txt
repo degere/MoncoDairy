@@ -1,0 +1,30 @@
+﻿00:00 +0: loading C:/GITHUB/MoncoDairy-integracion/Flutter/test/eva3_offline_test.dart
+00:00 +0: F-040 sin red: la lista de corrales emite un error de conexi├│n entendible
+00:00 +1: F-041 al volver la red, el siguiente ciclo recupera los 20 corrales
+00:00 +2: F-042 (HU-006) tras un dato v├ílido, un corte de red conserva el ├║ltimo dato
+00:00 +2 -1: F-042 (HU-006) tras un dato v├ílido, un corte de red conserva el ├║ltimo dato [E]
+  Expected: <Instance of 'List<Corral>'>
+    Actual: ApiException:<No se pudo conectar con el servidor (http://prueba).>
+     Which: is not an instance of 'List<Corral>'
+  el 2┬║ evento fue un error: el dato anterior se perdi├│
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\eva3_offline_test.dart 101:5                   main.<fn>
+  
+00:00 +2 -1: F-043 (HU-006) una sesi├│n nueva sin red permite ingresar con el PIN guardado
+Login: sin conexi├│n con Django: ClientException: sin red
+00:00 +2 -2: F-043 (HU-006) una sesi├│n nueva sin red permite ingresar con el PIN guardado [E]
+  Expected: true
+    Actual: <false>
+  sin red no hay ingreso: la app no guarda credenciales ni datos en el tel├®fono
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\eva3_offline_test.dart 109:5                   main.<fn>
+  
+00:00 +2 -2: Some tests failed.
+
+Failing tests:
+  C:/GITHUB/MoncoDairy-integracion/Flutter/test/eva3_offline_test.dart: F-042 (HU-006) tras un dato v├ílido, un corte de red conserva el ├║ltimo dato
+  C:/GITHUB/MoncoDairy-integracion/Flutter/test/eva3_offline_test.dart: F-043 (HU-006) una sesi├│n nueva sin red permite ingresar con el PIN guardado

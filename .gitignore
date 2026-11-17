@@ -1,0 +1,6 @@
+Flutter/build/
+Flutter/oracleJdk-27/
+Flutter/.dart_tool/
+Flutter/.gradle/
+Flutter/android/.gradle/
+.idea/
